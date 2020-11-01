@@ -1,0 +1,31 @@
+#!/bin/bash
+
+set -e
+
+source main.cfg
+
+rm -rf "$wapp" "$wapp.wapp"
+echo "Building..."
+rm -rf "$wapp"
+create-app "$wapp" &> /dev/null
+cd "$wapp"
+# Desktop File
+echo -e "# Sample Desktop Application Entry
+[Desktop Entry]
+Name=$name
+GenericName=$generic_name
+Comment=$comment
+Type=Application
+Exec=x-www-browser \"$website\"
+Icon=/etc/web-apps/$wapp/$icon
+Terminal=false
+Categories=$categories
+Keywords=$keywords" > "deskfiles/$wapp.desktop"
+echo '#!/bin/bash' > 'hooks/uninst'
+echo 'rm -rf /etc/web-apps/'"$wapp"'/ /usr/share/applications/'"$wapp"'.desktop' >> 'hooks/uninst'
+echo '#!/bin/bash' > 'hooks/postinst'
+rm -rf app/*
+cp "../$icon" icon.png &> /dev/null || true
+build-app &> /dev/null
+cd ..
+rm -rf "$wapp"
