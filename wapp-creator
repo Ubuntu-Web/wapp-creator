@@ -16,9 +16,10 @@ Name=$name
 GenericName=$generic_name
 Comment=$comment
 Type=Application
-Exec=x-www-browser \"$website\"
+Exec=sh -c \"snow '$website' $wapp || x-www-browser '$website'\"
 Icon=/etc/web-apps/$wapp/$icon
 Terminal=false
+StartupWMClass=$wapp
 Categories=$categories
 Keywords=$keywords" > "deskfiles/$wapp.desktop"
 echo '#!/bin/bash' > 'hooks/uninst'
